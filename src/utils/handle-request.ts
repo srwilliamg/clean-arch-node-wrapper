@@ -1,6 +1,38 @@
 import { IEndpointLogRepository, IRequest, IResponse } from '../adapters';
 
+import { CustomError } from './errors';
 import { measureTime } from './measure-time';
+
+function saveLog<R>(
+  measure: { startDate: Date; endDate: Date; start(): any; end(): number },
+  endpointLogRepository: IEndpointLogRepository,
+  f: (...args: any[]) => Promise<R>,
+  body: any,
+  params,
+  query,
+  response: any,
+  res: IResponse,
+) {
+  const duration = measure.end();
+
+  const log = endpointLogRepository.create({
+    name: f.name,
+    payload: { ...body, ...params, ...query },
+    executionTime: duration,
+    startTime: measure.startDate.toISOString(),
+    endTime: measure.endDate.toISOString(),
+    response: response,
+  });
+
+  endpointLogRepository
+    .save(log)
+    .then((savedLogs) => {
+      // console.log('savedLogs:', savedLogs);
+    })
+    .catch(() => [console.error('Error saving endpoint log')]);
+
+  res.send(response);
+}
 
 export function handleRequest<R>(
   f: (...args: any[]) => Promise<R>,
@@ -16,26 +48,22 @@ export function handleRequest<R>(
     } catch (error) {
       console.error(error);
       res.statusCode = 500;
+
+      if (error instanceof CustomError) {
+        res.statusCode = error.code;
+        response = error;
+      }
     } finally {
-      const duration = measure.end();
-
-      const log = endpointLogRepository.create({
-        name: f.name,
-        payload: { ...body, ...params, ...query },
-        executionTime: duration,
-        startTime: measure.startDate.toISOString(),
-        endTime: measure.endDate.toISOString(),
-        response: response,
-      });
-
-      endpointLogRepository
-        .save(log)
-        .then((savedLogs) => {
-          // console.log('savedLogs:', savedLogs);
-        })
-        .catch(() => [console.error('Error saving endpoint log')]);
-
-      res.send(response);
+      saveLog<R>(
+        measure,
+        endpointLogRepository,
+        f,
+        body,
+        params,
+        query,
+        response,
+        res,
+      );
     }
     return;
   };

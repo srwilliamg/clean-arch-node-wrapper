@@ -15,9 +15,6 @@ const compat = new FlatCompat({
 });
 
 export default [
-  {
-    ignores: ['!node_modules/', 'node_modules/*', 'migrations/*'],
-  },
   ...compat.extends(
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -36,7 +33,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
-
+    ignorePatterns: ['node_modules/', 'migrations/'],
     rules: {
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',

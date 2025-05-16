@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 
-import { DATABASE } from '../../src/constants';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 dotenv.config();

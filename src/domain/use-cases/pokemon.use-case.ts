@@ -1,11 +1,20 @@
+import { IPokeApi } from '../../adapters/infrastructure';
 import { IPokemonUseCase } from '../../adapters/use-cases/pokemon.interface';
 
-// interface IDependencies {}
+interface IDependencies {
+  PokeApi: IPokeApi;
+}
 
 export class PokemonUseCase implements IPokemonUseCase {
-  constructor() {}
+  private PokeApi: IPokeApi;
+  constructor(dependencies: IDependencies) {
+    this.PokeApi = dependencies.PokeApi;
+  }
 
-  findPokemon = async (payload) => {
-    return payload;
+  findPokemon = async ({ name }: { name: string }) => {
+    const res = await this.PokeApi.getPokemon(name);
+    console.log('🚀 ~ PokemonUseCase ~ findPokemon= ~ res:', res);
+
+    return res;
   };
 }

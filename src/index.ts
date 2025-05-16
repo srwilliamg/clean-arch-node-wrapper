@@ -1,13 +1,14 @@
 import * as dotenv from 'dotenv';
-import * as express from 'express';
 
 import DATA_SOURCE from '../config/orm/data-source';
+import { PokeApi } from './infrastructure/poke-api/poke-api';
 import { PokemonController } from './application/controllers/pokemon';
 import { PokemonUseCase } from './domain/use-cases/pokemon.use-case';
 import { RequestValidator } from './infrastructure/validation/request-validator';
 import { apiKeyAuth } from './application/middlewares/api-key-auth';
+import express from 'express';
 import { initRepositories } from './infrastructure/init-repository';
-import { storeRoutes } from './infrastructure/routes/pokemon';
+import { pokeRoutes } from './infrastructure/routes/pokemon';
 
 dotenv.config();
 
@@ -18,15 +19,16 @@ const init = async () => {
   app.use(apiKeyAuth);
 
   const { endpointLogRepository } = await initRepositories(ds);
-
   const requestValidator = new RequestValidator();
-  const pokemonUseCase = new PokemonUseCase();
-  const storeController = new PokemonController({
+  const pokeApiInstance = new PokeApi();
+
+  const pokemonUseCase = new PokemonUseCase({ PokeApi: pokeApiInstance });
+  const pokemonController = new PokemonController({
     requestValidator,
     pokemonUseCase,
   });
 
-  storeRoutes(app, storeController, endpointLogRepository);
+  pokeRoutes(app, pokemonController, endpointLogRepository);
 
   const port = process.env.PORT || 3000;
 
