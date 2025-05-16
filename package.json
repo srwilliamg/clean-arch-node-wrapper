@@ -1,0 +1,43 @@
+{
+  "scripts": {
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix --quiet",
+    "test": "jest --config ./jest-config.ts",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "ts-node ./src/index.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d ./config/orm/data-source.ts",
+    "db:drop": "npm run typeorm schema:drop",
+    "db:create": "npx typeorm migration:create",
+    "db:generate": "npm run typeorm migration:generate",
+    "db:migrate": "npm run typeorm migration:run",
+    "db:revert": "npm run typeorm migration:revert",
+    "db:show-migrations": "npm run typeorm migration:show",
+    "docker:start:db": "(cd tools/docker && docker compose up postgres -d)",
+    "docker:start": "(cd tools/docker && docker compose up -d)",
+    "docker:build": "(cd tools/docker && docker compose build)",
+    "docker:stop": "(cd tools/docker && docker compose down)",
+    "docker:delete": "(cd tools/docker && docker compose down -v)"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "joi": "^17.13.3",
+    "pg": "^8.13.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
+    "@types/joi": "^17.2.3",
+    "@types/node": "^22.7.6",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "eslint": "^9.12.0",
+    "jest": "^29.7.0",
+    "prettier": "3.3.3",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.3"
+  }
+}

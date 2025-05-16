@@ -1,0 +1,5 @@
+CREATE USER table WITH PASSWORD 'table' CREATEDB;
+
+CREATE DATABASE postgres WITH OWNER = table TABLESPACE = pg_default CONNECTION
+LIMIT
+    = -1;

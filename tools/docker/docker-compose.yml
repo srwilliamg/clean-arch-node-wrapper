@@ -1,0 +1,33 @@
+networks:
+  api-network:
+
+services:
+  api_backend:
+    build: ../../
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=apidb
+      - DATABASE_PASS=apidb
+      - DATABASE_NAME=postgres
+    depends_on:
+      - 'postgres'
+    networks:
+      - api-network
+
+  postgres:
+    image: postgres:14.7
+    container_name: api-db
+    restart: always
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=apidb
+      - POSTGRES_PASSWORD=apidb
+    ports:
+      - 5434:5432
+    volumes:
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
+    networks:
+      api-network:
