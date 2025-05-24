@@ -1,3 +1,10 @@
+interface IDefaultPayload {
+  query?: any;
+  body?: any;
+  params?: any;
+}
+
 export type IPokemonController = {
-  findPokemon(payload: { query: any }, config: any);
+  findPokemon(payload: IDefaultPayload);
+  getPokemons(payload: IDefaultPayload);
 };

@@ -11,10 +11,11 @@ export class PokemonUseCase implements IPokemonUseCase {
     this.PokeApi = dependencies.PokeApi;
   }
 
-  findPokemon = async ({ name }: { name: string }) => {
-    const res = await this.PokeApi.getPokemon(name);
-    console.log('🚀 ~ PokemonUseCase ~ findPokemon= ~ res:', res);
+  findPokemon = async ({ identifier }: { identifier: number | string }) => {
+    return await this.PokeApi.getPokemon(identifier);
+  };
 
-    return res;
+  getPokemons = async (payload: { limit: number; offset: number }) => {
+    return this.PokeApi.getPokemonsPaginated(payload);
   };
 }
