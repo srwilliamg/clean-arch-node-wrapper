@@ -6,6 +6,7 @@ import { PokemonController } from './application/controllers/pokemon';
 import { PokemonUseCase } from './domain/use-cases/pokemon.use-case';
 import { RequestValidator } from './infrastructure/validation/request-validator';
 import { apiKeyAuth } from './application/middlewares/api-key-auth';
+import cors from 'cors';
 import express from 'express';
 import { initRepositories } from './infrastructure/init-repository';
 import { pokeRoutes } from './infrastructure/routes/pokemon';
@@ -18,16 +19,32 @@ const init = async () => {
   const app = express();
   app.use(apiKeyAuth);
 
-  const { endpointLogRepository } = await initRepositories(ds);
+  const { endpointLogRepository, PokemonRepository } =
+    await initRepositories(ds);
   const requestValidator = new RequestValidator();
   const pokeApiInstance = new PokeApi();
 
-  const pokemonUseCase = new PokemonUseCase({ PokeApi: pokeApiInstance });
+  const pokemonUseCase = new PokemonUseCase({
+    PokeApi: pokeApiInstance,
+    PokemonRepository,
+  });
   const pokemonController = new PokemonController({
     requestValidator,
     pokemonUseCase,
   });
 
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://localhost:5173',
+  ];
+
+  app.use(
+    cors({
+      origin: allowedOrigins,
+    }),
+  );
   pokeRoutes(app, pokemonController, endpointLogRepository);
 
   const port = process.env.PORT || 3000;

@@ -25,7 +25,6 @@ export class PokemonController implements IPokemonController {
   }
 
   findPokemon = async ({ params }) => {
-    console.log('🚀 ~ PokemonController ~ getPokemons= ~ params:', params);
     const isErrorSchema = this.validator.validate(findPokemonSchema, params);
 
     if (isErrorSchema) {
@@ -49,24 +48,6 @@ export class PokemonController implements IPokemonController {
       return isErrorSchema;
     }
 
-    const pokemon = await this.pokemonUseCase.getPokemons(query);
-    console.log('Found Pokemons paginated:', pokemon);
-
-    if (!pokemon) {
-      throw new ErrorNotFound('Pokemons not found');
-    }
-
-    const pokemonDetails = await Promise.all(
-      pokemon.results.map(({ url }) => {
-        const [id] = url.split('/').at(-2);
-        return this.pokemonUseCase.findPokemon({ identifier: +id });
-      }),
-    );
-    console.log(
-      '🚀 ~ PokemonController ~ getPokemons= ~ pokemonDetails:',
-      pokemonDetails,
-    );
-
-    return pokemonDetails;
+    return this.pokemonUseCase.getPokemons(query);
   };
 }

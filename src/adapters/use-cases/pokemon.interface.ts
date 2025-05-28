@@ -1,5 +1,4 @@
 import { IFindPokemonResponse } from '../infrastructure/poke-api.interface';
-import { IPokemonPaginatedResponse } from '../../infrastructure/poke-api/poke.interface';
 
 export type IPokemonUseCase = {
   findPokemon(payload: {
@@ -8,5 +7,5 @@ export type IPokemonUseCase = {
   getPokemons(payload: {
     limit: number;
     offset: number;
-  }): Promise<IPokemonPaginatedResponse>;
+  }): Promise<IFindPokemonResponse[]>;
 };

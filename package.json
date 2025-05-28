@@ -20,16 +20,20 @@
     "docker:delete": "(cd tools/docker && docker compose down -v)"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.17",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "joi": "^17.13.3",
+    "lodash": "^4.17.21",
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
     "tsx": "^4.19.4",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.18",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.13",
     "@types/joi": "^17.2.3",

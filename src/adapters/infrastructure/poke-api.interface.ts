@@ -9,10 +9,10 @@ export type IPokeApi = {
 };
 
 export type IFindPokemonResponse = {
-  id: number;
+  extId: number;
   name: string;
   weight: number;
   height: number;
-  backDefault: string;
-  frontDefault: string;
+  urlBackDefault: string;
+  urlFrontDefault: string;
 };

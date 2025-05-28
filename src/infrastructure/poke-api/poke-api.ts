@@ -26,20 +26,20 @@ export class PokeApi implements IPokeApi {
     const jsonResponse: IGetApiPokemon = await response.json();
 
     const {
-      id,
+      id: extId,
       name,
       weight,
       height,
-      sprites: { back_default: backDefault, front_default: frontDefault },
+      sprites: { back_default: urlBackDefault, front_default: urlFrontDefault },
     } = jsonResponse;
 
     return {
-      id,
+      extId,
       name,
       weight,
       height,
-      backDefault,
-      frontDefault,
+      urlBackDefault,
+      urlFrontDefault,
     };
   };
 
