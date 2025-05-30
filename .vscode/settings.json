@@ -70,5 +70,14 @@
         "-l"
       ]
     },
+  },
+  "[properties]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "terminal.integrated.profiles.linux": {
+    "Kitty": {
+      "path": "kitty",
+      "args": ["-d", "${workspaceFolder}"],
+    }
   }
 }
