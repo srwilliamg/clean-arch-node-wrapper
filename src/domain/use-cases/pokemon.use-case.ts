@@ -28,7 +28,7 @@ export class PokemonUseCase implements IPokemonUseCase {
     }
 
     const apiDataWithIds = pokemons.results.map(({ url, name }) => {
-      const [id] = url.split('/').at(-2);
+      const id = url.split('/').at(-2);
       return { id: +id, url, name };
     });
 
@@ -49,20 +49,30 @@ export class PokemonUseCase implements IPokemonUseCase {
       nonExisting.map(({ id }) => this.PokeApi.getPokemon(+id)),
     );
 
-    const saved = await this.PokemonRepository.saveMany(
-      pokemonDetails.map(
-        ({ extId, height, name, urlBackDefault, urlFrontDefault, weight }) => {
-          return this.PokemonRepository.create({
-            extId,
-            height,
-            name,
-            urlBackDefault,
-            urlFrontDefault,
-            weight,
-          });
-        },
-      ),
-    );
+    const saved =
+      pokemonDetails.length > 0
+        ? await this.PokemonRepository.saveMany(
+            pokemonDetails.map(
+              ({
+                extId,
+                height,
+                name,
+                urlBackDefault,
+                urlFrontDefault,
+                weight,
+              }) => {
+                return this.PokemonRepository.create({
+                  extId,
+                  height,
+                  name,
+                  urlBackDefault,
+                  urlFrontDefault,
+                  weight,
+                });
+              },
+            ),
+          )
+        : [];
 
     return [...existingPokemons, ...saved].sort((v) => v.extId);
   };

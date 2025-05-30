@@ -15,9 +15,25 @@ dotenv.config();
 
 const init = async () => {
   const ds = await DATA_SOURCE.initialize();
-
   const app = express();
+
+  const allowedOrigins = ['http://localhost:4000'];
+
+  const corsOptions: cors.CorsOptions = {
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin'],
+  };
+
   app.use(apiKeyAuth);
+  app.use(cors(corsOptions));
 
   const { endpointLogRepository, PokemonRepository } =
     await initRepositories(ds);
@@ -33,18 +49,6 @@ const init = async () => {
     pokemonUseCase,
   });
 
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:5173',
-    'http://localhost:5173',
-  ];
-
-  app.use(
-    cors({
-      origin: allowedOrigins,
-    }),
-  );
   pokeRoutes(app, pokemonController, endpointLogRepository);
 
   const port = process.env.PORT || 3000;

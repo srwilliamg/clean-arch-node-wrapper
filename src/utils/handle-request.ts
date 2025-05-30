@@ -44,7 +44,25 @@ export function handleRequest<R>(
     const { body, params, query, headers } = req;
 
     try {
-      response = await f({ body, params, query }, { headers });
+      response = await f({ req, res, body, params, query }, { headers });
+      // if (req.method === 'GET') {
+      //   res.statusCode = 200;
+      // }
+      // if (req.method === 'POST') {
+      //   res.statusCode = 201;
+      // }
+      // if (req.method === 'PUT') {
+      //   res.statusCode = 200;
+      // }
+      // if (req.method === 'DELETE') {
+      //   res.statusCode = 204;
+      // }
+      // if (req.method === 'PATCH') {
+      //   res.statusCode = 200;
+      // }
+      // if (req.method === 'OPTIONS') {
+      //   res.statusCode = 204;
+      // }
     } catch (error) {
       console.error(error);
       res.statusCode = 500;
