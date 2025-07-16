@@ -13,7 +13,7 @@
     "db:migrate": "npm run typeorm migration:run",
     "db:revert": "npm run typeorm migration:revert",
     "db:show-migrations": "npm run typeorm migration:show",
-    "docker:start:db": "(cd tools/docker && docker compose up postgres -d)",
+    "docker:start:db": "(cd tools/docker && docker compose up poke-db -d)",
     "docker:start": "(cd tools/docker && docker compose up -d)",
     "docker:build": "(cd tools/docker && docker compose build)",
     "docker:stop": "(cd tools/docker && docker compose down)",

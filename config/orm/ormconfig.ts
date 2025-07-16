@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv';
-
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 dotenv.config();
-
+//console.log('Loading ORM configuration...', process.env);
 const appPath = __dirname + '/../../';
-
 const config: PostgresConnectionOptions = {
   type: 'postgres',
   host: process.env.DATABASE_HOST,
