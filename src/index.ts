@@ -35,8 +35,7 @@ const init = async () => {
   app.use(apiKeyAuth);
   app.use(cors(corsOptions));
 
-  const { endpointLogRepository, PokemonRepository } =
-    await initRepositories(ds);
+  const { endpointLogRepository, PokemonRepository } = initRepositories(ds);
   const requestValidator = new RequestValidator();
   const pokeApiInstance = new PokeApi();
 
